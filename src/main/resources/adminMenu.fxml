@@ -9,6 +9,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminMenuController">
    <children>
@@ -19,7 +20,7 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TableView fx:id="ProductTable" layoutX="10.0" layoutY="9.0" prefHeight="348.0" prefWidth="373.0" />
-                        <Button fx:id="EnterButton" defaultButton="true" layoutX="533.0" layoutY="251.0" mnemonicParsing="false" prefHeight="72.0" prefWidth="57.0" text="Enter" />
+                        <Button fx:id="EnterButton" defaultButton="true" layoutX="533.0" layoutY="295.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="57.0" text="Enter" />
                         <ComboBox fx:id="whatToDoBox" layoutX="392.0" layoutY="31.0" prefHeight="25.0" prefWidth="196.0" promptText="What to do?" />
                         <Button fx:id="addProductButton" layoutX="390.0" layoutY="334.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="129.0" text="Add product" />
                         <Button fx:id="logOutButton" cancelButton="true" layoutX="533.0" layoutY="334.0" mnemonicParsing="false" text="Log out" />
@@ -43,6 +44,11 @@
                         <CheckBox fx:id="HaveDisc" layoutX="391.0" layoutY="249.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="123.0" text="There is a discount" />
                         <CheckBox fx:id="NoDisc" layoutX="391.0" layoutY="273.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="89.0" text="No discount" />
                         <CheckBox fx:id="NoProduct" layoutX="391.0" layoutY="298.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="89.0" text="No product" />
+                        <Label layoutX="495.0" layoutY="358.0" text="Press Enter to refresh">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
             </content>

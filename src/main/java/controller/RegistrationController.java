@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import static connections.Connecting.*;
+import static service.UserService.email;
 
 public class RegistrationController implements ViewInterfaces {
     CountryService countryService = new CountryService();
@@ -108,6 +109,7 @@ public class RegistrationController implements ViewInterfaces {
         signInButton.setOnAction(event -> {
             try {
                 startConnection();
+                email = emailFiled.getText();
                 PreparedStatement preparedStmt = null;
                 preparedStmt = connection.prepareStatement(StringFile.INSERT_INTO_USER);
                 preparedStmt.setString(1, nameFiled.getText());
@@ -118,7 +120,7 @@ public class RegistrationController implements ViewInterfaces {
                 preparedStmt.setString(6, passwordFiled.getText());
                 preparedStmt.setInt(7, 20);
                 preparedStmt.setInt(8, countryId[0]);
-                preparedStmt.setString(9, "");
+                preparedStmt.setString(9, null);
                 preparedStmt.setDate(10, Date.valueOf(birthdaypicker.getValue()));
                 preparedStmt.setDate(11, Date.valueOf(LocalDate.now()));
                 preparedStmt.setDate(12, Date.valueOf(LocalDate.now()));

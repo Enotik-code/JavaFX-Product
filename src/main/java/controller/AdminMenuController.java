@@ -9,7 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import service.CountryService;
 import service.ProductService;
+import service.SubcategoryService;
 import strings.StringFile;
 
 import java.sql.ResultSet;
@@ -21,6 +23,9 @@ import static connections.Connecting.*;
 
 public class AdminMenuController implements ViewInterfaces {
     ProductService productService = new ProductService();
+    CountryService countryService = new CountryService();
+    SubcategoryService subcategoryService = new SubcategoryService();
+
     @FXML
     private ComboBox<?> whatToDoUser;
 
@@ -28,13 +33,13 @@ public class AdminMenuController implements ViewInterfaces {
     private TextField FindFiled;
 
     @FXML
-    private ComboBox<?> subcategoryBox;
+    private ComboBox<String> subcategoryBox;
 
     @FXML
-    private ComboBox<?> SortByBox;
+    private ComboBox<String> SortByBox;
 
     @FXML
-    private ComboBox<?> CountryBox;
+    private ComboBox<String> CountryBox;
 
     @FXML
     private TextField MinPrice;
@@ -90,13 +95,77 @@ public class AdminMenuController implements ViewInterfaces {
         updateProductData();
         setTable();
         whatToDoBox.setItems(setWhatToDoBox());
-        EnterButton.setDisable(true);
-        whatToDoBox.setOnAction(event -> EnterButton.setDisable(false));
+        SortByBox.setItems(getSortList());
+        CountryBox.setItems(getCountryList());
+        subcategoryBox.setItems(getSubcategoryList());
         logOutButton.setOnAction(event -> {
             logOutButton.getScene().getWindow().hide();
             updateScene("/main.fxml");
         });
+        SortByBox.setOnAction(event -> {
+            if (SortByBox.getValue().equals("Ascending")) {
+                ObservableList<Product> productsByCategory = FXCollections
+                        .observableArrayList(productService
+                                .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_ORDER_BY_PRICE_ASCENDING));
+                ProductTable.setItems(productsByCategory);
+            }
+            if (SortByBox.getValue().equals("Descending")) {
+                ObservableList<Product> productsByCategory = FXCollections
+                        .observableArrayList(productService
+                                .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_ORDER_BY_PRICE_DESCENDING));
+                ProductTable.setItems(productsByCategory);
+            }
+            if (SortByBox.getValue().equals("Null")) {
+                ObservableList<Product> productsAll = FXCollections
+                        .observableArrayList(productService
+                                .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT));
+                ProductTable.setItems(productsAll);
+            }
+        });
+        subcategoryBox.setOnAction(event ->{
+            ObservableList<Product> productsBySubcategory = FXCollections
+                    .observableArrayList(productService
+                            .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_BY_SUBCATEGORY + "'"
+                                    + subcategoryBox.getValue() + "';"));
+            ProductTable.setItems(productsBySubcategory);
+        });
+        CountryBox.setOnAction(event -> {
+            ObservableList<Product> productsByCountry = FXCollections
+                    .observableArrayList(productService
+                            .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_BY_COUNTRY
+                                    + CountryBox.getValue() + "'"));
+            ProductTable.setItems(productsByCountry);
+        });
+        FindFiled.setOnAction(event -> {
+            if (FindFiled.getText().equals("")) {
+                ObservableList<Product> productsAll = FXCollections
+                        .observableArrayList(productService
+                                .getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT));
+                ProductTable.setItems(productsAll);
+            }
+            if (!FindFiled.getText().equals("")) {
+                ObservableList<Product> productsFind = FXCollections
+                        .observableArrayList(productService
+                                .getListProduct(StringFile
+                                        .SELECT_ALL_FROM_PRODUCT_FIND_BY_NAME + "'%" + FindFiled.getText() + "%';"));
+                ProductTable.setItems(productsFind);
+            }
+
+        });
+        NoDisc.setOnAction(event ->{
+            ProductTable.setItems(FXCollections.observableArrayList(productService.
+                    getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_NO_DISCOUNT)));
+        });
+        HaveDisc.setOnAction(event ->{
+            ProductTable.setItems(FXCollections.observableArrayList(productService.
+                    getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_HAVE_DISCOUNT)));
+        });
+        NoProduct.setOnAction(event -> {
+            ProductTable.setItems(FXCollections.observableArrayList(productService.
+                    getListProduct(StringFile.SELECT_ALL_FROM_PRODUCT_NO_PRODUCT)));
+        });
         EnterButton.setOnAction(event -> {
+            updateProductData();
             if (whatToDoBox.getValue().equals("Delete")) {
                 TableView.TableViewSelectionModel<Product> selectionModel = ProductTable.getSelectionModel();
                 selectionModel.selectedItemProperty().addListener(new ChangeListener<Product>() {
@@ -140,12 +209,12 @@ public class AdminMenuController implements ViewInterfaces {
                     }
                 });
             }
-
         });
         addProductButton.setOnAction(event -> {
             addProductButton.getScene().getWindow().hide();
             updateScene("/addProduct.fxml");
         });
+        
     }
 
 
@@ -199,6 +268,20 @@ public class AdminMenuController implements ViewInterfaces {
         }
         return info;
     }
+
+    public ObservableList<String> getSortList(){
+        return FXCollections.observableArrayList("Ascending", "Descending", "Null");
+    }
+
+    public ObservableList<String> getCountryList(){
+        return FXCollections.observableArrayList(countryService.getListCountry());
+    }
+
+    public ObservableList<String> getSubcategoryList(){
+        return FXCollections.observableArrayList(subcategoryService.getSubcategoryList(StringFile.SELECT_ALL_FROM_SUBCATEGORY));
+    }
+
+
 }
 
 

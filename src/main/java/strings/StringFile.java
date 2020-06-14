@@ -22,7 +22,12 @@ public class StringFile {
             "join subcategory on product.idsubcategory = subcategory.id\n" +
             "join country on product.idmanufacturer = country.id\n" +
             "where product.name = '";
-
+    public static final String SELECT_ALL_FROM_PRODUCT_BY_COUNTRY = "select product.name, subcategory.Description," +
+            "product.amount, product.dicsount, product.price, country.Description\n" +
+            "from product\n" +
+            "join subcategory on product.idsubcategory = subcategory.id\n" +
+            "join country on product.idmanufacturer = country.id\n" +
+            "where country.Description = '";
     public static final String SELECT_ALL_FROM_PRODUCT_ORDER_BY_PRICE_ASCENDING = "select product.name ," +
             " subcategory.Description, product.amount, product.dicsount, product.price\n" +
             "from product\n" +
@@ -33,6 +38,21 @@ public class StringFile {
             "from product\n" +
             "join subcategory on product.idsubcategory = subcategory.id\n" +
             "order by product.price desc";
+    public static final String SELECT_ALL_FROM_PRODUCT_NO_DISCOUNT = "select product.name ," +
+            " subcategory.Description, product.amount, product.dicsount, product.price\n" +
+            "from product\n" +
+            "join subcategory on product.idsubcategory = subcategory.id\n" +
+            "where product.dicsount = 0";
+    public static final String SELECT_ALL_FROM_PRODUCT_HAVE_DISCOUNT = "select product.name ," +
+            " subcategory.Description, product.amount, product.dicsount, product.price\n" +
+            "from product\n" +
+            "join subcategory on product.idsubcategory = subcategory.id\n" +
+            "where product.dicsount != 0";
+    public static final String SELECT_ALL_FROM_PRODUCT_NO_PRODUCT = "select product.name ," +
+            " subcategory.Description, product.amount, product.dicsount, product.price\n" +
+            "from product\n" +
+            "join subcategory on product.idsubcategory = subcategory.id\n" +
+            "where product.amount = 0";
     public static final String SELECT_ALL_FROM_PRODUCT_BY_SUBCATEGORY = "select product.name , subcategory.Description," +
             " product.amount, product.dicsount, product.price\n" +
             "from product\n" +
@@ -54,7 +74,7 @@ public class StringFile {
 
     public static final String INSERT_INTO_USER = "insert into user " +
             "(name, surname, patronymic, number, email, password," +
-            " idPosition, idCountry, cardNumber, dateOfBirthday, dateOfCreated, dateOfModified)" +
+            " idPosition, idCountry, account, dateOfBirthday, dateOfCreated, dateOfModified)" +
             "values(?,?,?,?,?,?,?,?,?,?,?,?)";
     public static final String INSERT_INTO_PRODUCT = "insert into product " +
             "(name, idsubcategory, amount, start_price, dicsount, price, idmanufacturer)" +

@@ -22,7 +22,7 @@ public class MainController implements ViewInterfaces {
         });
         RegistrationButton.setOnAction(event -> {
             RegistrationButton.getScene().getWindow().hide();
-            updateScene("/registrationPage");
+            updateScene("/registrationPage.fxml");
         });
         ExitButton.setOnAction(event -> System.exit(0));
     }
