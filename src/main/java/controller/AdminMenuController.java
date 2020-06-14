@@ -14,12 +14,57 @@ import strings.StringFile;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import static connections.Connecting.*;
 
 
 public class AdminMenuController implements ViewInterfaces {
     ProductService productService = new ProductService();
+    @FXML
+    private ComboBox<?> whatToDoUser;
+
+    @FXML
+    private TextField FindFiled;
+
+    @FXML
+    private ComboBox<?> subcategoryBox;
+
+    @FXML
+    private ComboBox<?> SortByBox;
+
+    @FXML
+    private ComboBox<?> CountryBox;
+
+    @FXML
+    private TextField MinPrice;
+
+    @FXML
+    private TextField MaxPrice;
+
+    @FXML
+    private TextField MinDisc;
+
+    @FXML
+    private TextField MaxDisc;
+
+    @FXML
+    private CheckBox HaveDisc;
+
+    @FXML
+    private CheckBox NoDisc;
+
+    @FXML
+    private CheckBox NoProduct;
+
+    @FXML
+    private Button enterUser;
+
+    @FXML
+    private ComboBox<?> sortBoxUser;
+
+    @FXML
+    private TextField findFiledBoxUser;
 
     @FXML
     private TableView<Product> ProductTable;
@@ -58,17 +103,22 @@ public class AdminMenuController implements ViewInterfaces {
                     @Override
                     public void changed(ObservableValue<? extends Product> observable, Product oldValue, Product newValue) {
                         try {
-                            startConnection();
-                            statement.executeUpdate("DELETE FROM product WHERE name ='" + newValue.getName() + "'");
-                            endConnection();
-                            getAlert("Succsessfully", Alert.AlertType.CONFIRMATION);
-                            updateProductData();
+                            Optional<ButtonType> resultAlert = getAlert("Delete?", Alert.AlertType.CONFIRMATION).showAndWait();
+                            if (resultAlert.get() == ButtonType.OK) {
+                                startConnection();
+                                statement.executeUpdate("DELETE FROM product WHERE name ='" + newValue.getName() + "'");
+                                endConnection();
+                                getAlert("Succsessfully", Alert.AlertType.INFORMATION);
+                                updateProductData();
+                            }
+                            else{
+                                updateProductData();
+                            }
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
                     }
                 });
-                whatToDoBox.setValue("What to do?");
             }
             if (whatToDoBox.getValue().equals("Update")) {
                 TableView.TableViewSelectionModel<Product> selectionModel = ProductTable.getSelectionModel();
@@ -80,17 +130,15 @@ public class AdminMenuController implements ViewInterfaces {
                         updateScene("/updateProduct.fxml");
                     }
                 });
-                whatToDoBox.setValue("What to do?");
             }
             if (whatToDoBox.getValue().equals("Info")) {
                 TableView.TableViewSelectionModel<Product> selectionModel = ProductTable.getSelectionModel();
                 selectionModel.selectedItemProperty().addListener(new ChangeListener<Product>() {
                     @Override
                     public void changed(ObservableValue<? extends Product> observable, Product oldValue, Product newValue) {
-                        infoLabel.setText(getInfo(newValue.getName()));
+                       getAlert(getInfo(newValue.getName()), Alert.AlertType.INFORMATION);
                     }
                 });
-                whatToDoBox.setValue("What to do?");
             }
 
         });
